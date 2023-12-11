@@ -1,15 +1,10 @@
 {
-  "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^8.0.3",
-    "nodemon": "^3.0.2"
-  },
   "name": "be-security-graduation-projectt",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start" : "nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -21,5 +16,10 @@
     "url": "https://github.com/dalabilal/BE-security-graduation-projectt/issues"
   },
   "homepage": "https://github.com/dalabilal/BE-security-graduation-projectt#readme",
-  "description": ""
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "nodemon": "^3.0.2"
+  }
 }
