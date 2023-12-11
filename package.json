@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "nodemon": "^3.0.2"
+  },
+  "name": "be-security-graduation-projectt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dalabilal/BE-security-graduation-projectt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dalabilal/BE-security-graduation-projectt/issues"
+  },
+  "homepage": "https://github.com/dalabilal/BE-security-graduation-projectt#readme",
+  "description": ""
+}
