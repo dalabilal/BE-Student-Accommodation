@@ -7,9 +7,9 @@ import { userRoutes } from './router';
 dotenv.config();
 
 const app: Express = express();
-const port =  3000;
+const port =  3004;
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors());
 app.use(express.json());
 
 // Use the user routes
