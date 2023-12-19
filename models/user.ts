@@ -6,6 +6,7 @@ export interface UserAttributes {
   email: string;
   password: string;
   phoneNumber: string;
+  role: string; // Add 'role' property to the UserAttributes interface
 }
 
 export interface UserDocument extends UserAttributes, Document {}
@@ -15,7 +16,8 @@ const userSchema = new mongoose.Schema({
   lastname: String,
   email: String,
   password: String,
-  phoneNumber: String
+  phoneNumber: String,
+  role: String, // Include 'role' field in the userSchema
 });
 
 const User: Model<UserDocument> = mongoose.model<UserDocument>('User', userSchema);
