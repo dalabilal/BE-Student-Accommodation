@@ -2,8 +2,9 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { userRoutes, usersRoutes } from './router';
+import { userRoutes, usersRoutes,logoutRoutes } from './router';
 import session from 'express-session';
+
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 // Use the user routes
 app.use('/signup', userRoutes);
 app.use('/signin', usersRoutes);
+app.use('/logout', logoutRoutes); 
 
 app.get('/', (req, res) => {
   res.send('Your Server is working fine!');
