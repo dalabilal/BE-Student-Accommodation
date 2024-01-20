@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { logoutRoutes, userRoutes, usersRoutes } from './router';
+import { userRoutes, usersRoutes } from './router';
 import session from 'express-session';
 
 dotenv.config();
@@ -19,7 +19,6 @@ app.use(express.json());
 
 // Use the user routes
 app.use('/signup', userRoutes);
-app.use('/logout', logoutRoutes);
 app.use('/signin', usersRoutes);
 
 app.get('/', (req, res) => {
