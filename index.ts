@@ -2,18 +2,24 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { userRoutes, usersRoutes } from './router';
+import { logoutRoutes, userRoutes, usersRoutes } from './router';
+import session from 'express-session';
 
 dotenv.config();
 
 const app: Express = express();
 const port =  3005;
 
-app.use(cors());
+app.use(cors({
+  origin:'http://localhost:3005',
+  credentials :true,
+}));
 app.use(express.json());
+
 
 // Use the user routes
 app.use('/signup', userRoutes);
+app.use('/logout', logoutRoutes);
 app.use('/signin', usersRoutes);
 
 app.get('/', (req, res) => {

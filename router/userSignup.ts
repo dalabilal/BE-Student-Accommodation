@@ -1,14 +1,14 @@
 import express, { Request, Response } from 'express';
-import User from '../models/user';
 import bcrypt from 'bcrypt';
-
-// ... (other imports)
+import jwt from 'jsonwebtoken';
+import User from '../models/user';
+import * as cookie from 'cookie';
 
 const router = express.Router();
 
-// POST route for user sign-up
 router.post('/', async (req: Request, res: Response) => {
   const { firstname, lastname, email, password, confirmPassword, phoneNumber, role } = req.body;
+   
   try {
     if (password !== confirmPassword) {
       console.log('Passwords do not match');
@@ -23,15 +23,41 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    
-    // Create a new user in the database
+
     const newUser = new User({ firstname, lastname, email, password: hashedPassword, phoneNumber, role });
 
     await newUser.save();
+    const JWT_EXPIRATION_NUM : any =  process.env.JWT_EXPIRATION_NUM;
+    const NODE_ENV : any =  process.env.NODE_ENV;
+    
+    const token = jwt.sign(
+      {
+        userId: newUser._id,
+      },
+       process.env.JWT_SECRET || "dAlAiStHeBeSt",
+    );
+    // Send back the user's firstname and token in the response
+    const secureCookie : boolean = true;
+    const httpOnlyCookie : boolean = true;
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 7);
 
-    // Send a success response
-    res.status(201).json({ message: 'User created successfully', user: newUser });
-  } catch (error: any) {
+    const cookieOptions: cookie.CookieSerializeOptions  = {
+      secure: secureCookie,
+      httpOnly: httpOnlyCookie,
+      expires: expirationDate,
+    };
+
+// Set the cookie in the response header using res.cookie
+const cookieString = cookie.serialize('jwtToken', token, cookieOptions);
+res.setHeader('Set-Cookie', cookieString);
+   res.cookie('jwtToken', token, cookieOptions);
+    res.status(201).json({
+      message: 'User created successfully',
+      firstname: newUser.firstname,
+      token,
+    });
+  } catch (error : any) {
     console.error('Error creating user:', error.message);
     res.status(500).json({ error: { message: 'Error creating user', details: error.message } });
   }
