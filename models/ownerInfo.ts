@@ -38,7 +38,7 @@ const housingSchema: Schema<HousingDocument> = new Schema({
     required: true,
   },
   files: {
-    type: [Object],
+    type: [String],
     required: true,
   },
 });

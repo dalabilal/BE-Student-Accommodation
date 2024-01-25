@@ -7,7 +7,23 @@ const router = express.Router();
 router.post('/', async (req : Request, res : Response) => {
   try {
     console.log("im here" ,req.body )
-    const newHousing = new Housing(req.body);
+    const name = req.body.name;
+    const phoneNumber = req.body.phoneNumber;
+    const location = req.body.location;
+    const university = req.body.university;
+    const rooms = req.body.rooms;
+    const description =req.body.description;
+    // const files = req.file.filename;
+    const Housingo = {
+      name,
+      phoneNumber,
+      location,
+      university,
+      rooms,
+      description,
+      // files
+    }
+    const newHousing = new Housing(Housingo);
     const savedHousing = await newHousing.save();
     res.status(201).json(savedHousing);
   } catch (error) {
