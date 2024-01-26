@@ -3,3 +3,4 @@ export { default as usersRoutes } from './userLogin';
 export { default as logoutRoutes } from './userlogout';
 export { default as ownerRoutes } from './ownerInfo';
 export { default as verifyRoutes } from './verify';
+export { default as resetRoutes } from './resetPassword';
