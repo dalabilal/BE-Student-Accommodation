@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import Users from '../models/userLogin';
 import * as cookie from 'cookie';
 import jwt from "jsonwebtoken";
+import { sendVerificationCode } from './emailService';
 
 const router = express.Router();
 
@@ -16,51 +17,76 @@ router.post('/', async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log("Before conditions:", user.loginAttempts, user.lastLoginAttempt);
 
-    if (isPasswordValid) {
-      // Generate a JWT token upon successful login
-      const token = jwt.sign(
-        {
-          userId: user._id,
-        },
-        process.env.JWT_SECRET || "dAlAiStHeBeSt",
-        { expiresIn: '1h' }
-      );
+      const isPasswordValid = await bcrypt.compare(password, user.password);
 
-      // Set the cookie in the response header using res.cookie
-      const secureCookie: boolean = true;
-      const httpOnlyCookie: boolean = true;
-      const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + 7);
+      if (isPasswordValid) {
+        user.loginAttempts = 0; // Reset login attempts only when the password is correct
+        user.lastLoginAttempt = null;
+        user.verificationCode = 0;
 
-      const cookieOptions: cookie.CookieSerializeOptions = {
-        secure: secureCookie,
-        httpOnly: httpOnlyCookie,
-        expires: expirationDate,
-      };
+        await user.save();
 
-      // Set the cookie in the response header
-      const cookieString = cookie.serialize('jwtToken', token, cookieOptions);
-      res.setHeader('Set-Cookie', cookieString);
+        const token = jwt.sign(
+          {
+            userId: user._id,
+          },
+          process.env.JWT_SECRET || "dAlAiStHeBeSt",
+          { expiresIn: '1h' }
+        );
 
-      // Verify the token for additional handling or validation
-      jwt.verify(token, process.env.JWT_SECRET || "dAlAiStHeBeSt", (err, decoded) => {
-        if (err) {
-          // Handle invalid or expired token
-          return res.status(401).json({ error: 'Invalid or expired token' });
+        const secureCookie: boolean = true;
+        const httpOnlyCookie: boolean = true;
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 7);
+
+        const cookieOptions: cookie.CookieSerializeOptions = {
+          secure: secureCookie,
+          httpOnly: httpOnlyCookie,
+          expires: expirationDate,
+        };
+
+        const cookieString = cookie.serialize('jwtToken', token, cookieOptions);
+        res.setHeader('Set-Cookie', cookieString);
+
+        jwt.verify(token, process.env.JWT_SECRET || "dAlAiStHeBeSt", (err, decoded) => {
+          if (err) {
+            return res.status(401).json({ error: 'Invalid or expired token' });
+          }
+
+          res.status(200).json({ ...user.toObject(), password: undefined, token });
+        });
+      } else {
+        user.loginAttempts = Number(user.loginAttempts) + 1;
+        console.log("loginAttempts", user.loginAttempts);
+        user.lastLoginAttempt = new Date();
+
+        await user.save();
+
+        if (user.loginAttempts >= 3) {
+          const verificationCode = generateVerificationCode();
+          user.verificationCode = verificationCode;
+          await user.save();
+        
+          // Send verification code to the user's email
+          sendVerificationCode(user.email, verificationCode);
+        
+          return res.status(403).json({
+            message: `Verification code sent to your email. Enter the code to proceed.`,
+          });
         }
-
-     
-        // Additional logic or response handling based on the verification result
-        res.status(200).json({ ...user.toObject(), password: undefined, token });
-      });
-    } else {
-      return res.status(401).json({ message: 'Invalid credentials' });
+        
+        return res.status(401).json({ message: 'Invalid credentials' });
     }
   } catch (error: any) {
     res.status(500).json({ message: 'Error during login', error: error.message });
   }
 });
+
+function generateVerificationCode() {
+  // Implement your logic to generate a verification code
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 export default router;

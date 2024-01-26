@@ -5,6 +5,9 @@ export interface UserAttributes {
   email: string;
   password: string;
   role: string; // Add the role field
+  verificationCode?: any; // Make sure verificationCode is optional
+  loginAttempts: number;
+  lastLoginAttempt: Date | null;
 }
 
 export interface UserDocument extends UserAttributes, Document {}
@@ -12,8 +15,10 @@ export interface UserDocument extends UserAttributes, Document {}
 const userSchema = new mongoose.Schema<UserDocument>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, required: true }, // Define the role field in the schema
-  // Other fields...
+  role: { type: String, required: true }, 
+  verificationCode: {type: String,default: null,}, 
+  loginAttempts: { type: Number, default: 0 },
+  lastLoginAttempt: { type: Date, default: null as Date | null },
 });
 
 userSchema.pre<UserDocument>('save', async function (next) {
