@@ -32,4 +32,25 @@ router.post('/', async (req, res) => {
     }
   });
   
+router.post('/signup', async (req, res) => {
+    const { email, verificationCode , verificationcode2 } = req.body;
+     console.log("body" , req.body);
+     
+    try {
+    
+      if (verificationcode2 === verificationCode) {
+        
+        console.log(verificationcode2 , verificationCode);
+
+        return res.status(200).json({ message: 'Verification successful' });
+      } else {
+       
+        return res.status(401).json({ message: 'Invalid verification code' });
+      }
+    } catch (error) {
+      console.error('Error during verification:', error);
+      res.status(500).json({ message: 'Error during verification' });
+    }
+  });
+  
   export default router;

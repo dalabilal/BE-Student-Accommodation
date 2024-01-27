@@ -18,6 +18,14 @@ router.post('/', async (req : Request, res : Response) => {
           res.status(200).json({message : 'verification code send '})}
     
 })
+router.post('/signup', async (req : Request, res : Response) => {
+    const { email } = req.body;
+  
+         const verificationCode = generateVerificationCode();
+          sendVerificationCode(email, verificationCode);
+          res.status(200).json({message : 'verification code send '})
+    
+})
 
 function generateVerificationCode() {
     // Implement your logic to generate a verification code
