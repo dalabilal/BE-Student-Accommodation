@@ -5,7 +5,8 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     const { email, verificationCode } = req.body;
-  
+     console.log("body" , req.body);
+     
     try {
       const user = await Users.findOne({ email });
   
@@ -14,7 +15,7 @@ router.post('/', async (req, res) => {
       }
   
       if (user.verificationCode === verificationCode) {
-        // Verification successful
+        
         console.log(user.verificationCode , verificationCode);
         
         user.verificationCode = null;
@@ -22,7 +23,7 @@ router.post('/', async (req, res) => {
   
         return res.status(200).json({ message: 'Verification successful' });
       } else {
-        // Verification failed
+       
         return res.status(401).json({ message: 'Invalid verification code' });
       }
     } catch (error) {

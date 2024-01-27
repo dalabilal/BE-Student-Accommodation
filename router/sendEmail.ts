@@ -11,11 +11,11 @@ router.post('/', async (req : Request, res : Response) => {
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
-    const verificationCode = generateVerificationCode();
+         else {const verificationCode = generateVerificationCode();
           user.verificationCode = verificationCode;
           await user?.save();
           sendVerificationCode(user?.email, verificationCode);
-          res.status(200).json({message : 'verification code send '})
+          res.status(200).json({message : 'verification code send '})}
     
 })
 
