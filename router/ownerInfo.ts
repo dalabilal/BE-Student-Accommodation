@@ -60,6 +60,24 @@ router.get('/housing', async (req: Request, res: Response) => {
   }
 });
 
+router.delete('/housing/:id', async (req: Request, res: Response) => {
+  const housingId = req.params.id;
 
+  try {
+    // Check if the housing ID exists
+    const housingToDelete = await Housing.findById(housingId);
+    if (!housingToDelete) {
+      return res.status(404).json({ message: 'Housing not found' });
+    }
+
+    // Perform the deletion
+    await Housing.findByIdAndDelete(housingId);
+    
+    res.status(200).json({ message: 'Housing deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting housing data', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 export default router;
