@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { buffer } from 'stream/consumers';
 
 interface HousingAttributes {
   name: string;
@@ -7,7 +8,8 @@ interface HousingAttributes {
   rooms: number;
   university: string;
   description: string;
-  files: string[];
+  files: Buffer;
+  ownerId : any
 }
 
 interface HousingDocument extends Document, HousingAttributes {}
@@ -38,9 +40,11 @@ const housingSchema: Schema<HousingDocument> = new Schema({
     required: true,
   },
   files: {
-    type: [String],
-    required: true,
+    type: Buffer,
   },
+  ownerId: {
+    type : String ,
+  }
 });
 
 const Housing = mongoose.model<HousingDocument>('Housing', housingSchema);

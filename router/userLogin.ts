@@ -55,7 +55,7 @@ router.post('/', async (req: Request, res: Response) => {
             return res.status(401).json({ error: 'Invalid or expired token' });
           }
 
-          res.status(200).json({ ...user.toObject(), password: undefined, token });
+          res.status(200).json({ userId: user._id , ...user.toObject(), password: undefined, token });
         });
       } else {
         user.loginAttempts = Number(user.loginAttempts) + 1;
