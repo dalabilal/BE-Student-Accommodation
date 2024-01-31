@@ -10,10 +10,7 @@ dotenv.config();
 const app: Express = express();
 const port =  3005;
 
-app.use(cors({
-  origin:'http://localhost:3005',
-  credentials :true,
-}));
+app.use(cors());
 app.use(express.json());
 
 
