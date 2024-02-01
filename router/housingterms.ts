@@ -27,11 +27,9 @@ router.post('/', async (req : Request, res : Response) => {
 
 router.get('/:id', async (req: Request, res: Response) => {
   const housingId = req.params.id;
-  console.log("terms" , housingId);
 
   try {
     const housingEntry = await Term.findOne({housingId});
-    console.log(housingEntry);
     
     if (!housingEntry) {
       return res.status(404).json({ message: 'Housing entry not found' });
