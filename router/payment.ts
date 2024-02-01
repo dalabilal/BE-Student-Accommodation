@@ -33,6 +33,7 @@ router.post('/', async (req: Request, res: Response) => {
 
     const expDate: string = req.body.expDate;
     const useid: string = req.body.useid;
+    const housingId: string = req.body.housingId;
 
     const payment = {
       holdername,
@@ -40,6 +41,7 @@ router.post('/', async (req: Request, res: Response) => {
       cvv: { iv: cvvIV, encryptedText: cvv, tag: cvvTag },
       expDate,
       useid,
+      housingId
     }
 
     const newPayment = new Payment(payment);
