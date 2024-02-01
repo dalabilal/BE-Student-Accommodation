@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     const { email, verificationCode } = req.body;
-     console.log("body" , req.body);
      
     try {
       const user = await Users.findOne({ email });
@@ -15,8 +14,6 @@ router.post('/', async (req, res) => {
       }
   
       if (user.verificationCode === verificationCode) {
-        
-        console.log(user.verificationCode , verificationCode);
         
         user.verificationCode = null;
         await user.save();
@@ -34,7 +31,6 @@ router.post('/', async (req, res) => {
   
 router.post('/signup', async (req, res) => {
     const { email, verificationCode , verificationcode2 } = req.body;
-     console.log("body" , req.body);
      
     try {
     

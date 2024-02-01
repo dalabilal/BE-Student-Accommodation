@@ -16,7 +16,6 @@ router.put('/',async (req : Request, res : Response) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    console.log("new" , newPassword);
     
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 

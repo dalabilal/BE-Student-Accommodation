@@ -17,7 +17,6 @@ router.post('/', async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    console.log("Before conditions:", user.loginAttempts, user.lastLoginAttempt);
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
@@ -59,7 +58,6 @@ router.post('/', async (req: Request, res: Response) => {
         });
       } else {
         user.loginAttempts = Number(user.loginAttempts) + 1;
-        console.log("loginAttempts", user.loginAttempts);
         user.lastLoginAttempt = new Date();
 
         await user.save();

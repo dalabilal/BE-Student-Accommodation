@@ -11,14 +11,12 @@ router.post('/', async (req: Request, res: Response) => {
    
   try {
     if (password !== confirmPassword) {
-      console.log('Passwords do not match');
       return res.status(400).json({ error: { message: 'Passwords do not match' } });
     }
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      console.log('Email already exists');
       return res.status(400).json({ error: { message: 'Email already exists' } });
     }
 
@@ -27,8 +25,6 @@ router.post('/', async (req: Request, res: Response) => {
     const newUser = new User({ firstname, lastname, email, password: hashedPassword, phoneNumber, role });
 
     await newUser.save();
-    const JWT_EXPIRATION_NUM : any =  process.env.JWT_EXPIRATION_NUM;
-    const NODE_ENV : any =  process.env.NODE_ENV;
     
     const token = jwt.sign(
       {
@@ -36,7 +32,7 @@ router.post('/', async (req: Request, res: Response) => {
       },
        process.env.JWT_SECRET || "dAlAiStHeBeSt",
     );
-    // Send back the user's firstname and token in the response
+
     const secureCookie : boolean = true;
     const httpOnlyCookie : boolean = true;
     const expirationDate = new Date();
@@ -48,7 +44,7 @@ router.post('/', async (req: Request, res: Response) => {
       expires: expirationDate,
     };
 
-// Set the cookie in the response header using res.cookie
+
 const cookieString = cookie.serialize('jwtToken', token, cookieOptions);
 res.setHeader('Set-Cookie', cookieString);
    res.cookie('jwtToken', token, cookieOptions);

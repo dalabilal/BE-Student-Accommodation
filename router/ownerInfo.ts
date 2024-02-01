@@ -3,10 +3,8 @@ import Housing from '../models/ownerInfo';
 
 const router = express.Router();
 
-// Route to add housing data
 router.post('/', async (req : Request, res : Response) => {
   try {
-    console.log("im here" ,req.body )
     const name = req.body.name;
     const phoneNumber = req.body.phoneNumber;
     const location = req.body.location;

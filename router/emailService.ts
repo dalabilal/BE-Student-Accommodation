@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 
 export async function sendVerificationCode(email: string, verificationCode: string): Promise<void> {
-    console.log("imhere" , email);
     const transporter = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
       port: 587,

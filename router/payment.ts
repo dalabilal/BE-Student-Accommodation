@@ -24,7 +24,6 @@ function decrypt(iv: string, encryptedText: string, tag: string): string {
 }
 
 router.post('/', async (req: Request, res: Response) => {
-  console.log(req.body.ownerId);
   
   try {
     const holdername: string = req.body.holdername;
