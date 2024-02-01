@@ -6,8 +6,8 @@ export async function sendVerificationCode(email: string, verificationCode: stri
       host: 'smtp.ethereal.email',
       port: 587,
       auth: {
-          user: 'chesley.runolfsdottir@ethereal.email',
-          pass: 'HVaFyET3NsjmymkgfX'
+          user: 'jaida.bahringer@ethereal.email',
+          pass: 'FFCV36JavKmUwrBWjS'
       }
   });
 

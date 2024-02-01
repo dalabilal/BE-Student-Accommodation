@@ -25,5 +25,23 @@ router.post('/', async (req : Request, res : Response) => {
   }
 });
 
+router.get('/:id', async (req: Request, res: Response) => {
+  const housingId = req.params.id;
+  console.log("terms" , housingId);
+
+  try {
+    const housingEntry = await Term.findOne({housingId});
+    console.log(housingEntry);
+    
+    if (!housingEntry) {
+      return res.status(404).json({ message: 'Housing entry not found' });
+    }
+   
+    res.status(200).json(housingEntry);
+  } catch (error) {
+    console.error('Error fetching housing entry by ID', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 export default router;
