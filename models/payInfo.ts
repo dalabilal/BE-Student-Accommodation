@@ -24,6 +24,7 @@ const paymentSchema: Schema = new Schema({
   expDate: { type: String, required: true },
   useid: { type: String, required: true },
   housingId: { type: String, required: true },
+  ownerId: { type: String, required: true },
 });
 
 const Payment = mongoose.model<IPayment>('Payment', paymentSchema);
