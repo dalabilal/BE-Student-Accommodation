@@ -81,7 +81,15 @@ router.post('/', async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error during login', error: error.message });
   }
 });
-
+router.get('/pay', async (req: Request, res: Response) => {
+  try {
+    const studentData = await Users.find();
+    res.status(200).json(studentData);
+  } catch (error) {
+    console.error('Error fetching student data', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 function generateVerificationCode() {
   // Implement your logic to generate a verification code
   return Math.floor(100000 + Math.random() * 900000).toString();

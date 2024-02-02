@@ -4,7 +4,6 @@ import Payment from '../models/payInfo';
 
 const router = express.Router();
 
-
 function encrypt(text: string): { iv: string; encryptedText: string; tag: string } {
   const iv = crypto.randomBytes(16).toString('hex');
   const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.from(process.env.ENCRYPTION_KEY || ''), Buffer.from(iv, 'hex'));
@@ -28,10 +27,8 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const holdername: string = req.body.holdername;
 
-    // Encrypt cardnum and cvv
     const { iv: cardnumIV, encryptedText: cardnum, tag: cardnumTag } = encrypt(req.body.cardnum);
     const { iv: cvvIV, encryptedText: cvv, tag: cvvTag } = encrypt(req.body.cvv);
-
     const expDate: string = req.body.expDate;
     const useid: string = req.body.useid;
     const housingId: string = req.body.housingId;
@@ -54,6 +51,19 @@ router.post('/', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error processing payment:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/owner', async (req: Request, res: Response) => {
+
+
+  try {
+    const ownerEntry = await Payment.find();
+   
+    res.status(200).json(ownerEntry);
+  } catch (error) {
+    console.error('Error fetching owner entry by ID', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
