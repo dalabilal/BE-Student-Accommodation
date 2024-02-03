@@ -37,10 +37,9 @@ router.get('/:userID', async (req: Request, res: Response) => {
 
   router.delete('/:dataId', async (req: Request, res: Response) => {
     try {
-      const userID = req.body.userID;
       const dataId = req.params.dataId;
-  
-      await Favorite.deleteOne({ userID, dataId });
+      const housingToDelete = await Favorite.findById(dataId);
+      await Favorite.findByIdAndDelete(housingToDelete);
   
       res.status(200).json({ message: 'Favorite item deleted successfully' });
     } catch (error: any) {
