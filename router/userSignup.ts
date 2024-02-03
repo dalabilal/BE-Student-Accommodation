@@ -51,6 +51,7 @@ res.setHeader('Set-Cookie', cookieString);
     res.status(201).json({
       message: 'User created successfully',
       firstname: newUser.firstname,
+      _id : newUser._id,
       token,
     });
   } catch (error : any) {
