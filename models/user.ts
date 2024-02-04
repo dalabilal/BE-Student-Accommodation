@@ -7,6 +7,7 @@ export interface UserAttributes {
   password: string;
   phoneNumber: string;
   role: string;
+  status : string;
 }
 
 export interface UserDocument extends UserAttributes, Document {}
@@ -25,6 +26,11 @@ const userSchema = new mongoose.Schema({
   },
   phoneNumber: String,
   role: String, // Include 'role' field in the userSchema
+  status: {
+    type: String,
+    enum: ['pending', 'approved'],
+    default: 'pending',
+  },
 });
 
 const User: Model<UserDocument> = mongoose.model<UserDocument>('User', userSchema);

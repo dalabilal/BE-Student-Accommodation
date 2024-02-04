@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import {verifyRoutes, userRoutes, usersRoutes,logoutRoutes, ownerRoutes ,paymentRoutes, resetRoutes ,sendEmail ,termsRoutes ,favoriteRoutes  } from './router';
+import {verifyRoutes, userRoutes, usersRoutes,logoutRoutes, ownerRoutes ,paymentRoutes, resetRoutes ,sendEmail ,termsRoutes ,favoriteRoutes ,adminRoutes  } from './router';
 
 
 dotenv.config();
@@ -25,6 +25,7 @@ app.use('/sendEmail', sendEmail);
 app.use('/payment', paymentRoutes); 
 app.use('/like', favoriteRoutes); 
 app.use('/term', termsRoutes); 
+app.use('/admin', adminRoutes); 
 
 app.get('/', (req, res) => {
   res.send('Your Server is working fine!');
