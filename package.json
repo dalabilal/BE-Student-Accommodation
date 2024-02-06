@@ -36,7 +36,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
     "nodemailer": "^6.9.8",
-    "nodemon": "^3.0.2",
     "stripe": "^14.14.0"
   },
   "devDependencies": {
@@ -45,6 +44,8 @@
     "@types/express": "^4.17.21",
     "@types/express-session": "^1.17.10",
     "@types/node": "^20.10.4",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
 }
