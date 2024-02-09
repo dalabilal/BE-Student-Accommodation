@@ -15,8 +15,11 @@ router.post('/', async (req: Request, res: Response) => {
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    } 
+    if (user.loginAttempts >= 3) {
+      return res.status(404).json({ message: 'You should verifiy yourself' });
+      
     }
-
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
@@ -54,7 +57,7 @@ router.post('/', async (req: Request, res: Response) => {
             return res.status(401).json({ error: 'Invalid or expired token' });
           }
 
-          res.status(200).json({ userId: user._id , ...user.toObject(), password: undefined, token });
+          res.status(200).json({ attempts : user.loginAttempts , userId: user._id , ...user.toObject(), password: undefined, token });
         });
       } else {
         user.loginAttempts = Number(user.loginAttempts) + 1;

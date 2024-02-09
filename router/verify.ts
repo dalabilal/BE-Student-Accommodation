@@ -4,7 +4,7 @@ import Users from '../models/userLogin';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const { email, verificationCode } = req.body;
+    const { email, verificationCode , attempts } = req.body;
      
     try {
       const user = await Users.findOne({ email });
@@ -16,6 +16,7 @@ router.post('/', async (req, res) => {
       if (user.verificationCode === verificationCode) {
         
         user.verificationCode = null;
+        user.loginAttempts = 0;
         await user.save();
   
         return res.status(200).json({ message: 'Verification successful' });
