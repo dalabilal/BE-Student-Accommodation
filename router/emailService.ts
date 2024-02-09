@@ -5,11 +5,10 @@ export async function sendVerificationCode(email: string, verificationCode: stri
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'gordon.lehner26@ethereal.email',
-        pass: 'k1m5HmEM5bVpZSt5G1'
+        user: 'bernard.dietrich85@ethereal.email',
+        pass: '8yUnSX6ST1ZQwdUs64'
     }
 });
-
 
   const mailOptions = {
     from: 'student housing <dalahhashlamoon@gmail.com>',
