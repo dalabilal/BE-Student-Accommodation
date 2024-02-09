@@ -12,6 +12,7 @@ router.post('/', async (req : Request, res : Response) => {
     const rooms = req.body.rooms;
     const description =req.body.description;
     const ownerId = req.body.ownerId;
+    const image = req.body.image;
 
     const Housingo = {
       name,
@@ -21,6 +22,7 @@ router.post('/', async (req : Request, res : Response) => {
       rooms,
       description,
       ownerId,
+      image,
     }
     const newHousing = new Housing(Housingo);
     const savedHousing = await newHousing.save();

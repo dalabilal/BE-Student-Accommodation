@@ -8,8 +8,8 @@ interface HousingAttributes {
   rooms: number;
   university: string;
   description: string;
-  files: Buffer;
-  ownerId : any
+  image : string;
+  ownerId : any;
 }
 
 interface HousingDocument extends Document, HousingAttributes {}
@@ -39,8 +39,9 @@ const housingSchema: Schema<HousingDocument> = new Schema({
     type: String,
     required: true,
   },
-  files: {
-    type: Buffer,
+  image: {
+    type : String ,
+    required: true,
   },
   ownerId: {
     type : String ,
