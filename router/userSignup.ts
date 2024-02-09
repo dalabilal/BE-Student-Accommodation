@@ -22,16 +22,28 @@ router.post('/', async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({
-       firstname,
-       lastname,
-       email,
-       password: hashedPassword,
-       phoneNumber,
-       role,
-       status : 'pending'
-    });
 
+    let newUser = new User({
+      firstname,
+      lastname,
+      email,
+      password: hashedPassword,
+      phoneNumber,
+      role,
+   });
+
+    if(role === 'owner') {
+       newUser = new User({
+         firstname,
+         lastname,
+         email,
+         password: hashedPassword,
+         phoneNumber,
+         role,
+         status : 'pending'
+      });
+    } 
+    
     await newUser.save();
     
     const token = jwt.sign(

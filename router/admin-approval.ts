@@ -30,4 +30,17 @@ router.get('/users', async (req: Request, res: Response) => {
   }
 });
 
+router.delete('/delete-user/:userId', async (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  try {
+    await User.findByIdAndDelete(userId);
+
+    return res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error: any) {
+    console.error('Error deleting user:', error.message);
+    return res.status(500).json({ error: { message: 'Internal server error' } });
+  }
+});
+
 export default router;
