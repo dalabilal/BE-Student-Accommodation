@@ -25,20 +25,13 @@ function decrypt(iv: string, encryptedText: string, tag: string): string {
 router.post('/', async (req: Request, res: Response) => {
   
   try {
-    const holdername: string = req.body.holdername;
-
-    const { iv: cardnumIV, encryptedText: cardnum, tag: cardnumTag } = encrypt(req.body.cardnum);
-    const { iv: cvvIV, encryptedText: cvv, tag: cvvTag } = encrypt(req.body.cvv);
-    const expDate: string = req.body.expDate;
+    const status = req.body.status;
     const useid: string = req.body.useid;
     const housingId: string = req.body.housingId;
     const ownerId: string = req.body.ownerId;
 
     const payment = {
-      holdername,
-      cardnum: { iv: cardnumIV, encryptedText: cardnum, tag: cardnumTag },
-      cvv: { iv: cvvIV, encryptedText: cvv, tag: cvvTag },
-      expDate,
+      status,
       useid,
       housingId,
       ownerId
