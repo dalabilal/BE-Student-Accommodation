@@ -5,12 +5,12 @@ const router = express.Router();
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { userID, dataId, name, description } = req.body;
+    const { userID, dataId, name, description ,image } = req.body;
 
     const existingLike = await Favorite.findOne({ userID, dataId });
 
     if (!existingLike) {
-      const newLike = new Favorite({ userID, dataId, name, description });
+      const newLike = new Favorite({ userID, dataId, name, description ,image});
       await newLike.save();
       return res.status(201).json({ message: 'Like saved successfully' });
     }

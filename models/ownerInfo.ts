@@ -10,6 +10,7 @@ interface HousingAttributes {
   description: string;
   image : string;
   ownerId : any;
+  username:string;
 }
 
 interface HousingDocument extends Document, HousingAttributes {}
@@ -44,6 +45,9 @@ const housingSchema: Schema<HousingDocument> = new Schema({
     required: true,
   },
   ownerId: {
+    type : String ,
+  },
+  username: {
     type : String ,
   }
 });

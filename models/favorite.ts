@@ -5,6 +5,7 @@ interface IFavorite extends Document {
   dataId: string;
   name: string;
   description: string;
+  image:string
 }
 
 const favoriteSchema: Schema<IFavorite> = new Schema({
@@ -12,6 +13,7 @@ const favoriteSchema: Schema<IFavorite> = new Schema({
   dataId: { type: String, required: true },
   name: { type: String, required: true },
   description: { type: String, required: true },
+  image: { type: String, required: true },
 });
 
 const Favorite = model<IFavorite>('Favorite', favoriteSchema);

@@ -13,16 +13,18 @@ router.post('/', async (req : Request, res : Response) => {
     const description =req.body.description;
     const ownerId = req.body.ownerId;
     const image = req.body.image;
+    const username = req.body.username;
 
     const Housingo = {
       name,
-      phoneNumber,
+      phoneNumber, 
       location,
-      university,
+      university, 
       rooms,
       description,
       ownerId,
       image,
+      username
     }
     const newHousing = new Housing(Housingo);
     const savedHousing = await newHousing.save();
@@ -49,7 +51,6 @@ router.get('/housing/:id', async (req: Request, res: Response) => {
   }
 });
 
-// Route to get all housing data
 router.get('/housing', async (req: Request, res: Response) => {
   try {
     const housingData = await Housing.find();
