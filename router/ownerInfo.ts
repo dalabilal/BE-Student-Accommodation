@@ -1,5 +1,6 @@
 import express, { Request, Response  } from 'express';
 import Housing from '../models/ownerInfo';
+import Logs from '../models/logsfile';
 
 const router = express.Router();
 
@@ -28,6 +29,16 @@ router.post('/', async (req : Request, res : Response) => {
     }
     const newHousing = new Housing(Housingo);
     const savedHousing = await newHousing.save();
+
+    let userLogs = new Logs({
+      userID: newHousing.ownerId,
+      date: new Date(),
+      name: newHousing.username,
+      actionType:"Add Acommodation",
+   });
+
+    await userLogs.save();
+
     res.status(201).json(savedHousing);
   } catch (error) {
     console.error("error",error);
@@ -71,6 +82,14 @@ router.delete('/housing/:id', async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Housing not found' });
     }
 
+    let userLogs = new Logs({
+      userID: housingToDelete.ownerId,
+      date: new Date(),
+      name: housingToDelete.username,
+      actionType:"Delete Acommodation",
+   });
+
+    await userLogs.save();
     // Perform the deletion
     await Housing.findByIdAndDelete(housingId);
     

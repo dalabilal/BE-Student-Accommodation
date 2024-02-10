@@ -4,6 +4,7 @@ import Users from '../models/userLogin';
 import * as cookie from 'cookie';
 import jwt from "jsonwebtoken";
 import { sendVerificationCode } from './emailService';
+import Logs from '../models/logsfile';
 
 const router = express.Router();
 
@@ -27,8 +28,17 @@ router.post('/', async (req: Request, res: Response) => {
         user.loginAttempts = 0; // Reset login attempts only when the password is correct
         user.lastLoginAttempt = null;
         user.verificationCode = 0;
-
+        
+        let userLogs = new Logs({
+          userID: user._id,
+          date: new Date(),
+          name: user.email,
+          actionType:"Login",
+       });
+    
+        await userLogs.save();
         await user.save();
+      
 
         const token = jwt.sign(
           {

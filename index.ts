@@ -13,8 +13,6 @@ const port =  3005;
 app.use(cors());
 app.use(express.json());
 
-
-// Use the user routes
 app.use('/signup', userRoutes);
 app.use('/signin', usersRoutes);
 app.use('/logout', logoutRoutes); 

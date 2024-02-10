@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import Users from '../models/userLogin';
+import Logs from '../models/logsfile';
 
 const router = express.Router();
 
@@ -20,6 +21,15 @@ router.put('/',async (req : Request, res : Response) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
    await Users.updateOne({email : email} , {password : hashedPassword})
+
+   let userLogs = new Logs({
+    userID: "",
+    date: new Date(),
+    name: email,
+    actionType:"Reset Password",
+ });
+
+  await userLogs.save();
 
     res.status(200).json({ message: 'Password reset successful' });
   });

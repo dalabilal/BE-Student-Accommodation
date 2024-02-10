@@ -1,26 +1,9 @@
 import express, { Request, Response } from 'express';
-import crypto from 'crypto';
 import Payment from '../models/payInfo';
+import Logs from '../models/logsfile';
+import Users from '../models/userLogin';
 
 const router = express.Router();
-
-function encrypt(text: string): { iv: string; encryptedText: string; tag: string } {
-  const iv = crypto.randomBytes(16).toString('hex');
-  const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.from(process.env.ENCRYPTION_KEY || ''), Buffer.from(iv, 'hex'));
-  let encrypted = cipher.update(text, 'utf-8', 'hex');
-  encrypted += cipher.final('hex');
-  const tag = cipher.getAuthTag().toString('hex');
-  return { iv, encryptedText: encrypted, tag };
-}
-
-function decrypt(iv: string, encryptedText: string, tag: string): string {
-  const decipher = crypto.createDecipheriv('aes-256-gcm', Buffer.from(process.env.ENCRYPTION_KEY || ''), Buffer.from(iv, 'hex'));
-  decipher.setAuthTag(Buffer.from(tag, 'hex'));
-
-  let decrypted = decipher.update(encryptedText, 'hex', 'utf-8');
-  decrypted += decipher.final('utf-8');
-  return decrypted;
-}
 
 router.post('/', async (req: Request, res: Response) => {
   
@@ -36,10 +19,18 @@ router.post('/', async (req: Request, res: Response) => {
       housingId,
       ownerId
     }
-
     const newPayment = new Payment(payment);
     const savedPayment = await newPayment.save();
-  
+    const user = await Users.findOne({ userID : newPayment?.useid });
+
+    let userLogs = new Logs({
+      userID: newPayment.useid,
+      date: new Date(),
+      name: user?.email,
+      actionType:"Booking",
+   });
+
+    await userLogs.save();
     res.status(201).json({ message: 'Payment successful', savedPayment });
   } catch (error) {
     console.error('Error processing payment:', error);
@@ -48,8 +39,6 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 router.get('/owner', async (req: Request, res: Response) => {
-
-
   try {
     const ownerEntry = await Payment.find();
    

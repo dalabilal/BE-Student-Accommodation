@@ -1,5 +1,7 @@
 import express, { Request, Response  } from 'express';
 import Favorite from '../models/favorite'
+import Logs from '../models/logsfile';
+import Users from '../models/userLogin';
 
 const router = express.Router();
 
@@ -12,6 +14,16 @@ router.post('/', async (req: Request, res: Response) => {
     if (!existingLike) {
       const newLike = new Favorite({ userID, dataId, name, description ,image});
       await newLike.save();
+
+      let userLogs = new Logs({
+        userID: newLike.userID,
+        date: new Date(),
+        name: newLike.name,
+        actionType:"Add To favorite",
+     });
+  
+      await userLogs.save();
+
       return res.status(201).json({ message: 'Like saved successfully' });
     }
 
@@ -40,7 +52,16 @@ router.get('/:userID', async (req: Request, res: Response) => {
       const dataId = req.params.dataId;
       const housingToDelete = await Favorite.findById(dataId);
       await Favorite.findByIdAndDelete(housingToDelete);
+      const user = await Users.findOne({userID: housingToDelete?.userID });
+
+      let userLogs = new Logs({
+        userID: housingToDelete?.userID || user?._id,
+        date: new Date(),
+        name: user?.email || "Not Found",
+        actionType:"Delete Favorite Accommodation",
+     });
   
+      await userLogs.save();
       res.status(200).json({ message: 'Favorite item deleted successfully' });
     } catch (error: any) {
       console.error('Error during delete favorite item:', error.message);

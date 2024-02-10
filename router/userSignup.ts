@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import Logs from '../models/logsfile';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import * as cookie from 'cookie';
@@ -43,7 +44,14 @@ router.post('/', async (req: Request, res: Response) => {
          status : 'pending'
       });
     } 
-    
+    let userLogs = new Logs({
+      userID: newUser._id,
+      date: new Date(),
+      name: newUser.email,
+      actionType:"Sign-Up",
+   });
+
+    await userLogs.save();
     await newUser.save();
     
     const token = jwt.sign(
