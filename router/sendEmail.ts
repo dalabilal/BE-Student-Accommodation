@@ -8,13 +8,14 @@ const router = express.Router();
 
 router.post('/', async (req : Request, res : Response) => {
     const { email } = req.body;
-    const user : any = await User.findOne({ email });
+    const user : any = await Users.findOne({ email });
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
          else {const verificationCode = generateVerificationCode();
           user.verificationCode = verificationCode;
-          await user?.save();
+          
+          await user.save();
           sendVerificationCode(user?.email, verificationCode);
           res.status(200).json({message : 'verification code send '})}
     

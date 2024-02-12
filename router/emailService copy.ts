@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export async function sendVerificationCode(email: string, verificationCode: string): Promise<void> {
+export async function sendMail(email: string): Promise<void> {
   const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
@@ -14,9 +14,8 @@ export async function sendVerificationCode(email: string, verificationCode: stri
     from: 'student housing <dalahhashlamoon@gmail.com>',
     to: `${email}`,
     subject: 'Verification Code',
-    text: `Your verification code is: ${verificationCode}
-           if this wasn't you, you can contact us using this email :
-           dalaShatha@gmail.com
+    text: `Your Account is active now, thank you!
+           you can conntact us using this email dalaShatha@gmail.com
     `,
   };
 

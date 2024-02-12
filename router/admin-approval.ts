@@ -1,6 +1,8 @@
 // admin.route.js
 import express, { Request, Response } from 'express';
 import User from '../models/user';
+import { sendVerificationCode } from './emailService';
+import { sendMail } from './emailService copy';
 
 const router = express.Router();
 
@@ -10,6 +12,8 @@ router.post('/approve-users', async (req: Request, res: Response) => {
 
   try {
     // Update the status of selected users to 'approved'
+    const user = await User.findOne({ _id : userIds})
+    sendMail(user?.email ||  '')
     await User.updateMany({ _id: { $in: userIds } }, { status: 'approved' });
 
     return res.status(200).json({ message: 'Users approved successfully' });

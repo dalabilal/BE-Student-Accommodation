@@ -4,15 +4,18 @@ import Users from '../models/userLogin';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const { email, verificationCode , attempts } = req.body;
-     
+    const { email, verificationCode } = req.body;
+    console.log("dsfsd" , verificationCode);
+    
+    
     try {
       const user = await Users.findOne({ email });
-  
+      
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
-  
+      
+      console.log("user.verificationCode" , user.verificationCode);
       if (user.verificationCode === verificationCode) {
         
         user.verificationCode = null;
