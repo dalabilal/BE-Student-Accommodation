@@ -5,15 +5,18 @@ import * as cookie from 'cookie';
 import jwt from "jsonwebtoken";
 import { sendVerificationCode } from './emailService';
 import Logs from '../models/logsfile';
+import User from '../models/user';
 
 const router = express.Router();
 
 router.post('/', async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  console.log(email);
+  
 
   try {
     const user = await Users.findOne({ email });
-
+    
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     } 
@@ -29,10 +32,10 @@ router.post('/', async (req: Request, res: Response) => {
         user.lastLoginAttempt = null;
         user.verificationCode = 0;
         
-        let userLogs = new Logs({
+        const userLogs = new Logs({
           userID: user._id,
           date: new Date(),
-          name: user.email,
+          name: user?.email,
           actionType:"Login",
        });
     

@@ -2,6 +2,7 @@ import express, { Request, Response  } from 'express';
 import Favorite from '../models/favorite'
 import Logs from '../models/logsfile';
 import Users from '../models/userLogin';
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -15,10 +16,11 @@ router.post('/', async (req: Request, res: Response) => {
       const newLike = new Favorite({ userID, dataId, name, description ,image});
       await newLike.save();
 
+      const user = await User.findOne({ _id : userID});
       let userLogs = new Logs({
         userID: newLike.userID,
         date: new Date(),
-        name: newLike.name,
+        name: user?.email,
         actionType:"Add To favorite",
      });
   
@@ -50,12 +52,12 @@ router.get('/:userID', async (req: Request, res: Response) => {
   router.delete('/:dataId', async (req: Request, res: Response) => {
     try {
       const dataId = req.params.dataId;
-      const housingToDelete = await Favorite.findById(dataId);
-      await Favorite.findByIdAndDelete(housingToDelete);
-      const user = await Users.findOne({userID: housingToDelete?.userID });
+      const housingToDelete = await Favorite.findOne({dataId});
+      await Favorite.findByIdAndDelete(housingToDelete?._id);
+      const user = await User.findOne({ _id : housingToDelete?.userID });   
 
       let userLogs = new Logs({
-        userID: housingToDelete?.userID || user?._id,
+        userID: user?._id,
         date: new Date(),
         name: user?.email || "Not Found",
         actionType:"Delete Favorite Accommodation",

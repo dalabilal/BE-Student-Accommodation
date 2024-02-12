@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import Users from '../models/userLogin';
 import Logs from '../models/logsfile';
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.put('/',async (req : Request, res : Response) => {
       return res.status(400).json({ error: 'Invalid request body' });
     }
   
-    const user = Users.findOne({email});
+    const user = User.findOne({email});
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -20,7 +21,7 @@ router.put('/',async (req : Request, res : Response) => {
     
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-   await Users.updateOne({email : email} , {password : hashedPassword})
+   await User.updateOne({email : email} , {password : hashedPassword})
 
    let userLogs = new Logs({
     userID: "",

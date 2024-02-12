@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import Payment from '../models/payInfo';
 import Logs from '../models/logsfile';
-import Users from '../models/userLogin';
 import crypto from 'crypto';
+import User from '../models/user';
 
 const router = express.Router();
 function encrypt(text: string): { iv: string; encryptedText: string; tag: string } {
@@ -43,12 +43,12 @@ router.post('/', async (req: Request, res: Response) => {
     }
     const newPayment = new Payment(payment);
     const savedPayment = await newPayment.save();
-    const user = await Users.findOne({ userID : newPayment?.useid });
+    const user = await User.findOne({ _id : newPayment?.useid });
 
     let userLogs = new Logs({
       userID: newPayment.useid,
       date: new Date(),
-      name: user?.email || "df",
+      name: user?.email || "Not Found",
       actionType:"Booking",
    });
 
@@ -75,12 +75,12 @@ router.post('/google', async (req: Request, res: Response) => {
     }
     const newPayment = new Payment(payment);
     const savedPayment = await newPayment.save();
-    const user = await Users.findOne({ userID : newPayment?.useid });
+    const user = await User.findOne({ _id : newPayment?.useid });
 
     let userLogs = new Logs({
       userID: newPayment.useid,
       date: new Date(),
-      name: user?.email || "fgsd",
+      name: user?.email || "Not Found",
       actionType:"Booking",
    });
 

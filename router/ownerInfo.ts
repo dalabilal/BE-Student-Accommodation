@@ -1,6 +1,7 @@
 import express, { Request, Response  } from 'express';
 import Housing from '../models/ownerInfo';
 import Logs from '../models/logsfile';
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -30,10 +31,12 @@ router.post('/', async (req : Request, res : Response) => {
     const newHousing = new Housing(Housingo);
     const savedHousing = await newHousing.save();
 
+    const user = await User.findOne({ _id : newHousing.ownerId})
+
     let userLogs = new Logs({
       userID: newHousing.ownerId,
       date: new Date(),
-      name: newHousing.username,
+      name: user?.email,
       actionType:"Add Acommodation",
    });
 
@@ -81,11 +84,13 @@ router.delete('/housing/:id', async (req: Request, res: Response) => {
     if (!housingToDelete) {
       return res.status(404).json({ message: 'Housing not found' });
     }
+    const user = await User.findOne({ _id : housingToDelete.ownerId});
+
 
     let userLogs = new Logs({
       userID: housingToDelete.ownerId,
       date: new Date(),
-      name: housingToDelete.username,
+      name: user?.email ||"",
       actionType:"Delete Acommodation",
    });
 

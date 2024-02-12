@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/', async (req : Request, res : Response) => {
     const { email } = req.body;
-    const user : any = await Users.findOne({ email });
+    const user : any = await User.findOne({ email });
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }

@@ -2,6 +2,7 @@ import express, { Request, Response  } from 'express';
 import Term from '../models/termInfo';
 import Users from '../models/userLogin';
 import Logs from '../models/logsfile';
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -20,12 +21,17 @@ router.post('/', async (req : Request, res : Response) => {
     }
     const newTerms = new Term(Terms);
     const savedTerms = await newTerms.save();
-    const user = await Users.findOne({userID: newTerms.ownerId });
+    console.log("newTerms" , newTerms);
+    console.log("newTerms.ownerId " , newTerms.ownerId );
+    
+    const user = await User.findById(newTerms.ownerId);
+    console.log(user?.email);
+    
     
     let userLogs = new Logs({
       userID: newTerms.ownerId,
       date: new Date(),
-      name: user?.email || "not found",
+      name: user?.email,
       actionType:"Add Accommodation terms",
    });
 
